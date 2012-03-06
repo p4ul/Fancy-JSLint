@@ -5,13 +5,15 @@
 // @author       paul
 // @description  Adds stats to JSLint
 // @version  	 0.1.0
-
 // @match http://*.jslint.com/*
 // @match http://jslint.com/*
 // ==/UserScript==
 
+
+
 // a function that loads jQuery and calls a callback function when jQuery has finished loading
 function addJQuery(callback) {
+  'use strict';
   var script = document.createElement("script");
   script.setAttribute("src", "https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js");
   script.addEventListener('load', function() {
@@ -25,14 +27,21 @@ function addJQuery(callback) {
 
 
 function init(){
-	var outBox = $('<div />').addClass('infoPane');
+	'use strict';
+	var version = '0.1.0',
+	    outBox = $('<div />').addClass('infoPane');
 	$('#JSLINT_OUTPUT').before(outBox);
+	$('#JSLINT_EDITION').append('  Fancy <small>' + version + '</small>');
 
 	$('input[name="jslint"]').live('click',function(){
 		var numErrors = $('#JSLINT_OUTPUT p:not(".evidence")').length,
 		    varInForLoop = $('#errors p:contains(Stopping)').text() === '' ? false : true;
 		if( numErrors > 0 ) {
-			$('.infoPane').html('Errors '+numErrors + " broken due to var in loop ?"+varInForLoop+"<br />");
+			$('.infoPane').html('Errors '+numErrors );
+			if( varInForLoop ) {
+				$('.infoPane').append(" broken due to var in loop ?"+varInForLoop+"<br />");
+			}
+			$('.infoPane').append("<br />");
 		}	
 
 
