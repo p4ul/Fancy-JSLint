@@ -1,4 +1,7 @@
 # Fancy JSLint #
+
+see http://p4ul.github.com/Fancy-JSLint/ for more info
+
 _alpha version_
 
 * adds number of warnings below JSLint button
