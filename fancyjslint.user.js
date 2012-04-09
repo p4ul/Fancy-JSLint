@@ -25,9 +25,9 @@ function addJQuery(callback) {
 
 }
 
-function wordcount(domElementToCount){
+function wordCount(domElementToCount){
 	'use strict';
-	var numWords = jQuery.trim($(domElementToCount).val()).split(' ').length;
+	var numWords = $.trim($(domElementToCount).val()).split(' ').length;
 	if($(domElementToCount).val() === '') {
 		numWords = 0;
 	}	
@@ -41,7 +41,7 @@ function init(){
 	    outBox = $('<div />').addClass('infoPane');
 	$('#JSLINT_OUTPUT').before(outBox);
 	$('#JSLINT_EDITION').append('  Fancy <small>' + version + '</small>');
-	$('.infoPane').append('  Word Count ' + wordcount('#JSLINT_INPUT') + '.');
+	$('.infoPane').append('  Word Count ' + wordCount('#JSLINT_INPUT') + '.');
 
 	$('input[name="jslint"]').live('click',function(){
 		var numErrors = $('#JSLINT_OUTPUT p:not(".evidence")').length,
