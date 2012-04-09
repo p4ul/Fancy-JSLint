@@ -50,9 +50,10 @@ function init(){
 	$('input[name="jslint"]').live('click',function(){
 		var numErrors = $('#JSLINT_OUTPUT p:not(".evidence")').length,
 		    varInForLoop = $('#errors p:contains(Stopping)').text() === '' ? false : true;
+		$('.infoPane').html('');
 		$('.infoPane').append('  Word Count ' + wordCount('#JSLINT_INPUT') + '.');
 		if( numErrors > 0 ) {
-			$('.infoPane').html('Errors '+numErrors );
+			$('.infoPane').append('Errors '+numErrors );
 			if( varInForLoop ) {
 				$('.infoPane').append(" broken due to var in loop ?"+varInForLoop+"<br />");
 			}
