@@ -4,7 +4,7 @@
 // @include		*
 // @author		paul
 // @description		Adds stats to JSLint
-// @version		0.1.0
+// @version		0.1.1
 // @match http://*.jslint.com/*
 // @match http://jslint.com/*
 // ==/UserScript==
@@ -54,7 +54,7 @@ function init(){
 		$('.infoPane').append('  Word Count ' + wordCount('#JSLINT_INPUT') + '.');
 
 		if (numErrors > 0) {
-			$('.infoPane').html('Errors ' + numErrors);
+			$('.infoPane').append('Errors ' + numErrors);
 			if (varInForLoop) {
 				$('.infoPane').append(" broken due to var in loop ?" + varInForLoop + "<br />");
 			}
