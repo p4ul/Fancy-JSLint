@@ -25,20 +25,24 @@ function addJQuery(callback) {
 
 }
 
-function wordCount(domElementToCount){
-	'use strict';
-	var numWords = $.trim($(domElementToCount).val()).split(' ').length;
-	if($(domElementToCount).val() === '') {
-		numWords = 0;
-	}	
-	return numWords;
-}
+
 
 
 function init(){
 	'use strict';
 	var version = '0.1.0',
 	    outBox = $('<div />').addClass('infoPane');
+	    
+	    
+	function wordCount(domElementToCount){
+		'use strict';
+		var numWords = $.trim($(domElementToCount).val()).split(' ').length;
+		if($(domElementToCount).val() === '') {
+			numWords = 0;
+		}	
+		return numWords;
+	}
+
 	$('#JSLINT_OUTPUT').before(outBox);
 	$('#JSLINT_EDITION').append('  Fancy <small>' + version + '</small>');
 	$('.infoPane').append('  Word Count ' + wordCount('#JSLINT_INPUT') + '.');
