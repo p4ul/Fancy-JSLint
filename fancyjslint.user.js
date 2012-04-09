@@ -45,11 +45,12 @@ function init(){
 
 	$('#JSLINT_OUTPUT').before(outBox);
 	$('#JSLINT_EDITION').append('  Fancy <small>' + version + '</small>');
-	$('.infoPane').append('  Word Count ' + wordCount('#JSLINT_INPUT') + '.');
+	
 
 	$('input[name="jslint"]').live('click',function(){
 		var numErrors = $('#JSLINT_OUTPUT p:not(".evidence")').length,
 		    varInForLoop = $('#errors p:contains(Stopping)').text() === '' ? false : true;
+		$('.infoPane').append('  Word Count ' + wordCount('#JSLINT_INPUT') + '.');
 		if( numErrors > 0 ) {
 			$('.infoPane').html('Errors '+numErrors );
 			if( varInForLoop ) {
