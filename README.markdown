@@ -5,4 +5,4 @@ _alpha version_
 * warns of var in for loop that breaks processing
 
 
-click this to install https://github.com/p4ul/Fancy-JSLint/raw/master/fancyjslint.user.js
+click this to install https://github.com/dibs/Fancy-JSLint/raw/master/fancyjslint.user.js
