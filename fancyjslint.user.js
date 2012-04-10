@@ -2,7 +2,7 @@
 // @name		Fancy JSLint
 // @namespace		jQueryFancyJSLint
 // @include			*
-// @author			paul
+// @author			paul & denford
 // @description		Adds stats to JSLint
 // @version		0.1.1
 // @match http://*.jslint.com/*
@@ -25,6 +25,15 @@ function addJQuery(callback) {
 
 }
 
+function highlighter() {
+	'use strict';
+	//highlight different types of errors
+	$('#JSLINT_OUTPUT p:not(".evidence")').insertBefore("<div class='issue-wrapper'>");
+	$('#JSLINT_OUTPUT p.evidence').insertAfter("</div>");
+	$('.issue-wrapper').each(function (index) {
+		$(this).css({'border': '1px solid #f00'});
+	});
+}
 
 
 
@@ -32,14 +41,51 @@ function init() {
 	'use strict';
 	var version = '0.1.1',
 		outBox = $('<div />').addClass('infoPane'),
-		infoPaneStyle = {};
+		infoPaneStyle = {},
+		errorStyle = {},
+		borkenStyle = {},
+		wordsStyle = {},
+		clearer = {};
 
 	//styles
 	infoPaneStyle = {
-		background:		'#333',
-		color:			'#efefef',
-		padding:		'20px',
-		margin:			'11px'
+		'background':		'#333',
+		'color':			'#efefef',
+		'border':			'2px solid #efefef',
+		'padding':			'20px',
+		'margin':			'0 11px',
+		'fontSize':			'20px',
+		'lineHeight':		'30px',
+		'height':			'30px',
+		'position':			'relative',
+		'display':			'block'
+	};
+
+	wordsStyle = {
+		'font-size':		'20px',
+		'float':			'left',
+		'width':			'32%',
+		'text-align':		'middle',
+		'color':			'#ddd'
+	};
+
+	errorStyle = {
+		'font-size':		'40px',
+		'float':			'left',
+		'width':			'32%',
+		'text-align':		'middle'
+	};
+
+	borkenStyle = {
+		'font-size':		'20px',
+		'float':			'left',
+		'width':			'32%',
+		'text-align':		'middle',
+		'color':			'#ddd'
+	};
+
+	clearer = {
+		'clear':			'both'
 	};
 
 	function wordCount(domElementToCount) {
@@ -53,21 +99,24 @@ function init() {
 	$('#JSLINT_OUTPUT').before(outBox);
 	$('#JSLINT_EDITION').append('  Fancy <small>' + version + '</small>');
 	$('input[name="jslint"]').live('click', function () {
-		var numErrors = $('#JSLINT_OUTPUT p:not(".evidence")').length,
-		    varInForLoop = $('#errors p:contains(Stopping)').text() === '' ? false : true;
-
+		var errors = $('#JSLINT_OUTPUT p:not(".evidence")').length,
+			varInForLoop = $('#errors p:contains(Stopping)').text() === '' ? false : true,
+			words = wordCount('#JSLINT_INPUT');
 		$('.infoPane').html('').css(infoPaneStyle);
-		$('.infoPane').append("<div class='words'>Words: " + wordCount('#JSLINT_INPUT') + "</div>");
 
-		if (numErrors > 0) {
-			$('.infoPane').append("<div class='errors'>Errors: " + numErrors + "</div>");
-			if (varInForLoop) {
-				$('.infoPane').append("<div class='broken'>Broken due to var in loop ? " + varInForLoop + "</div>");
-			}
-		} else {
-			//clear error dialogue
-			$('.infoPane.errors').html('');
+		$('.infoPane').append("<div class='words'>Words: " + words + "</div>");
+		$('.infoPane').append("<div class='errors'>Errors: " + errors + "</div>");
+		if (varInForLoop) {
+
 		}
+		$('.infoPane').append("<div class='borken'>" + (varInForLoop === true ? "Borken due to var in loop ? " + varInForLoop : "") + "</div>");
+		$('.infoPane').append("<div class='clearer'></div>");
+
+		$('.infoPane .words').css(wordsStyle);
+		$('.infoPane .errors').css(errorStyle);
+		$('.infoPane .borken').css(borkenStyle);
+		$('.infoPane .clearer').css(clearer);
+		window.location.hash = '.infoPane';
 	});
 }
 
