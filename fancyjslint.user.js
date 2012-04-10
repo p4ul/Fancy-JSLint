@@ -30,8 +30,8 @@ function highlighter() {
 	//highlight different types of errors
 	$('#JSLINT_OUTPUT p:not(".evidence")').insertBefore("<div class='issue-wrapper'>");
 	$('#JSLINT_OUTPUT p.evidence').insertAfter("</div>");
-	$('.issue-wrapper').each(function (index) {
-		$(this).css({'border': '1px solid #f00'});
+	$('#JSLINT_OUTPUT p').each(function (index, target) {
+		$(target).css({'border': '1px solid #f00'});
 	});
 }
 
@@ -116,7 +116,7 @@ function init() {
 		$('.infoPane .errors').css(errorStyle);
 		$('.infoPane .borken').css(borkenStyle);
 		$('.infoPane .clearer').css(clearer);
-		window.location.hash = '.infoPane';
+		highlighter();
 	});
 }
 
