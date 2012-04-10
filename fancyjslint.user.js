@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name		Fancy JSLint
 // @namespace		jQueryFancyJSLint
-// @include		*
-// @author		paul
+// @include			*
+// @author			paul
 // @description		Adds stats to JSLint
 // @version		0.1.1
 // @match http://*.jslint.com/*
@@ -27,41 +27,46 @@ function addJQuery(callback) {
 
 
 
-function init(){
+
+function init() {
 	'use strict';
 	var version = '0.1.1',
-	    outBox = $('<div />').addClass('infoPane');
-	    
-	    
-	function wordCount(domElementToCount){
-		'use strict';
+		outBox = $('<div />').addClass('infoPane'),
+		infoPaneStyle = {};
+
+	//styles
+	infoPaneStyle = {
+		background:		'#333',
+		color:			'#efefef',
+		padding:		'20px',
+		margin:			'11px'
+	};
+
+	function wordCount(domElementToCount) {
 		var numWords = $.trim($(domElementToCount).val()).split(' ').length;
-		if($(domElementToCount).val() === '') {
+		if ($(domElementToCount).val() === '') {
 			numWords = 0;
-		}	
+		}
 		return numWords;
 	}
 
 	$('#JSLINT_OUTPUT').before(outBox);
 	$('#JSLINT_EDITION').append('  Fancy <small>' + version + '</small>');
-	
-
 	$('input[name="jslint"]').live('click', function () {
 		var numErrors = $('#JSLINT_OUTPUT p:not(".evidence")').length,
 		    varInForLoop = $('#errors p:contains(Stopping)').text() === '' ? false : true;
 
-		$('.infoPane').html('');
-		$('.infoPane').append('  Word Count ' + wordCount('#JSLINT_INPUT') + '.');
+		$('.infoPane').html('').css(infoPaneStyle);
+		$('.infoPane').append("<div class='words'>Words: " + wordCount('#JSLINT_INPUT') + "</div>");
 
 		if (numErrors > 0) {
-			$('.infoPane').append('Errors ' + numErrors);
+			$('.infoPane').append("<div class='errors'>Errors: " + numErrors + "</div>");
 			if (varInForLoop) {
-				$('.infoPane').append(" broken due to var in loop ?" + varInForLoop + "<br />");
+				$('.infoPane').append("<div class='broken'>Broken due to var in loop ? " + varInForLoop + "</div>");
 			}
-			$('.infoPane').append("<br />");
 		} else {
 			//clear error dialogue
-			$('.infoPane').html('');
+			$('.infoPane.errors').html('');
 		}
 	});
 }
