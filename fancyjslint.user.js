@@ -1,10 +1,10 @@
 // ==UserScript==
-// @name			Fancy JSLint
+// @name		Fancy JSLint
 // @namespace		jQueryFancyJSLint
-// @include			*
-// @author			paul
+// @include		*
+// @author		paul
 // @description		Adds stats to JSLint
-// @version			0.1.0
+// @version		0.1.1
 // @match http://*.jslint.com/*
 // @match http://jslint.com/*
 // ==/UserScript==
@@ -26,18 +26,35 @@ function addJQuery(callback) {
 }
 
 
-function init() {
+
+function init(){
 	'use strict';
 	var version = '0.1.1',
 	    outBox = $('<div />').addClass('infoPane');
+	    
+	    
+	function wordCount(domElementToCount){
+		'use strict';
+		var numWords = $.trim($(domElementToCount).val()).split(' ').length;
+		if($(domElementToCount).val() === '') {
+			numWords = 0;
+		}	
+		return numWords;
+	}
+
 	$('#JSLINT_OUTPUT').before(outBox);
 	$('#JSLINT_EDITION').append('  Fancy <small>' + version + '</small>');
+	
 
 	$('input[name="jslint"]').live('click', function () {
 		var numErrors = $('#JSLINT_OUTPUT p:not(".evidence")').length,
 		    varInForLoop = $('#errors p:contains(Stopping)').text() === '' ? false : true;
+
+		$('.infoPane').html('');
+		$('.infoPane').append('  Word Count ' + wordCount('#JSLINT_INPUT') + '.');
+
 		if (numErrors > 0) {
-			$('.infoPane').html('Errors ' + numErrors);
+			$('.infoPane').append('Errors ' + numErrors);
 			if (varInForLoop) {
 				$('.infoPane').append(" broken due to var in loop ?" + varInForLoop + "<br />");
 			}
