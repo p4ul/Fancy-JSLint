@@ -8,8 +8,10 @@
 // @match http://*.jslint.com/*
 // @match http://jslint.com/*
 // ==/UserScript==
-
-/*global document, alert, window, $*/
+// Usefull links:
+// * http://tech.groups.yahoo.com/group/jslint_com/
+// *
+/*global document, alert, window, $, console*/
 
 // a function that loads jQuery and calls a callback function when jQuery has finished loading
 function addJQuery(callback) {
@@ -25,16 +27,16 @@ function addJQuery(callback) {
 
 }
 
-
-
 function init() {
 	'use strict';
-	var version = '0.1.2',
+	var version = '0.1.3',
 		outBox = $('<div />').addClass('infoPane'),
 		infoPaneStyle = {},
 		errorStyle = {},
 		borkenStyle = {},
 		wordsStyle = {},
+		charsStyle = {},
+		sizeStyle = {},
 		clearer = {},
 		count;
 
@@ -46,8 +48,9 @@ function init() {
 		'padding':			'10px',
 		'margin':			'0 11px',
 		'fontSize':			'20px',
-		'lineHeight':		'40px',
-		'height':			'40px',
+		'lineHeight':		'60px',
+		'text-align':		'center',
+		// 'height':			'40px',
 		'position':			'relative',
 		'display':			'block'
 	};
@@ -55,25 +58,47 @@ function init() {
 	wordsStyle = {
 		'font-size':		'15px',
 		'line-height':		'20px',
-		'float':			'left',
+		'position':			'absolute',
+		'top':				'10px',
 		'width':			'32%',
-		'text-align':		'middle',
+		'height':			'20px',
+		'text-align':		'left',
 		'color':			'#ddd'
 	};
-
+	charsStyle = {
+		'font-size':		'15px',
+		'line-height':		'20px',
+		'position':			'absolute',
+		'top':				'30px',
+		'width':			'200px',
+		'height':			'20px',
+		'text-align':		'left',
+		'color':			'#ddd'
+	};
+	sizeStyle = {
+		'font-size':		'15px',
+		'line-height':		'20px',
+		'position':			'absolute',
+		'top':				'50px',
+		'width':			'200px',
+		'height':			'20px',
+		'text-align':		'left',
+		'color':			'#ddd'
+	};
 	errorStyle = {
-		'font-size':		'40px',
-		'float':			'left',
-		'width':			'32%',
-		'text-align':		'middle'
+		'font-size':		'60px',
+		'text-align':		'center'
 	};
 
 	borkenStyle = {
 		'font-size':		'20px',
-		'float':			'left',
-		'width':			'32%',
-		'text-align':		'middle',
-		'color':			'#ddd'
+		'position':			'absolute',
+		'top':				'30px',
+		'width':			'200px',
+		'height':			'20px',
+		'text-align':		'right',
+		'color':			'#ddd',
+		'border':			'solid 1px #efefef'
 	};
 
 	clearer = {
@@ -96,23 +121,23 @@ function init() {
 	//	});
 	// }
 
-	function defined(x) {
-		return (x === null || x === undefined) ? false : true;
-	}
+	//function defined(x) {
+	//	return (x === null || x === undefined) ? false : true;
+	//}
 
-	function eliteMode(mode) {
-		var kkeys = [], konami = "38,38,40,40,37,39,37,39,66,65";
-		if (!defined(mode)) {
-			mode = 'Novice';
-		}
-		$(document).keydown(function (e) {
-			kkeys.push(e.keyCode);
-			if (kkeys.toString().indexOf(konami) >= 0) {
-				$(document).unbind('keydown', arguments.callee);
-				alert('1337 mode: ' + mode);
-			}
-		});
-	}
+	//function eliteMode(mode) {
+	//	var kkeys = [], konami = "38,38,40,40,37,39,37,39,66,65";
+	//	if (!defined(mode)) {
+	//		mode = 'Novice';
+	//	}
+	//	$(document).keydown(function (e) {
+	//		kkeys.push(e.keyCode);
+	//		if (kkeys.toString().indexOf(konami) >= 0) {
+	//			$(document).unbind('keydown', arguments.callee);
+	//			alert('1337 mode: ' + mode);
+	//		}
+	//	});
+	//}
 
 	function highlighter() {
 		//highlight different types of errors
@@ -121,7 +146,7 @@ function init() {
 		//itterate through the p's
 		for (i = 0; i < errs.length; i += 1) {
 			console.log(i + ' - ', errs[i]);
-			if ($('#errors p:eq(' + (i + 1) + ')').hasClass('evidence') {
+			if ($('#errors p:eq(' + (i + 1) + ')').hasClass('evidence')) {
 				console.log('ev');
 			}
 			//	//errs[i].insertBefore('<div class="issue">');
@@ -132,12 +157,12 @@ function init() {
 		}
 
 		// $('#errors p').each(function () {
-		// 	if ($(this).hasClass('evidence') {
-		// 		$(this).insertAfter('</div>');
-		// 	} else {
-		// 		$(this).insertBefore('<div class="issue">');
-		// 	}
-		// });
+		//	if ($(this).hasClass('evidence') {
+		//		$(this).insertAfter('</div>');
+		//	} else {
+		//		$(this).insertBefore('<div class="issue">');
+		//	}
+		//});
 	}
 
 	function chars() {
@@ -164,18 +189,30 @@ function init() {
 	$('#JSLINT_EDITION').append('  Fancy <small>' + version + '</small>');
 	$('input[name="jslint"]').live('click', function () {
 		var errors = $('#JSLINT_OUTPUT p:not(".evidence")').length,
-			varInForLoop = $('#errors p:contains(Stopping)').text() === '' ? false : true;
+			varInForLoop = $('#errors p:contains(Stopping)').text() === '' ? false : true,
+			size = 0;
 			//words = wordCount('#JSLINT_INPUT'),
 			//count;
 
 		//get counts
 		count = chars();
 
+		//determine file size
+		size = (count.chars + 1);
+
+		if (size >= 1024) {
+			size = (Math.floor(size / 1024)) + 'KB';
+		} else {
+			size = size + 'B';
+		}
+
 		//Insert pane
 		$('.infoPane').html('').css(infoPaneStyle);
 
 		//$('.infoPane').append("<div class='words'>Words: " + words + "</div>");
-		$('.infoPane').append("<div class='words'>Words: " + count.words + "<br />Chars: " + (count.chars) + "</div>");
+		$('.infoPane').append("<div class='words'>Words: " + count.words + "</div>");
+		$('.infoPane').append("<div class='chars'>Chars: " + count.chars + "</div>");
+		$('.infoPane').append("<div class='size'>Size: ~" + size + "</div>");
 
 		//errors
 		$('.infoPane').append("<div class='errors'>Errors: " + errors + "</div>");
@@ -190,6 +227,8 @@ function init() {
 		$('.infoPane').append("<div class='clearer'></div>");
 
 		$('.infoPane .words').css(wordsStyle);
+		$('.infoPane .chars').css(charsStyle);
+		$('.infoPane .size').css(sizeStyle);
 		$('.infoPane .errors').css(errorStyle);
 		$('.infoPane .borken').css(borkenStyle);
 		$('.infoPane .clearer').css(clearer);
@@ -198,3 +237,4 @@ function init() {
 }
 
 addJQuery(init);
+
